@@ -1,7 +1,7 @@
 ---
 title: "QM 2023 Week 3: Statistical Inference"
-author: "Oliver Rittmann<br>Domantas Undzėnas"
-date: "September 21 | 22, 2023"
+author: "Domantas Undzėnas<br>Lisa-Marie Müller"
+date: "September 19 | 20, 2024"
 output:
   html_document:
     toc: yes
@@ -76,7 +76,7 @@ if (length(p_to_install) > 0) {
 sapply(p_needed, require, character.only = TRUE)
 
 # set the seed for replicability
-set.seed(2023)
+set.seed(2024)
 ```
 
 
@@ -185,7 +185,7 @@ ci_an
 
 ```{r Analytical CI 99}
 # modify the following line to get 99% CIs
-# mean(support) + qnorm(c(0.005, 0.995), 0, 1) * support_se 
+mean(support) + qnorm(c(0.005, 0.995), 0, 1) * support_se 
 ```
 
 ### Understanding Confidence Intervals {.tabset}
@@ -333,7 +333,9 @@ simsupport <- rnorm(n = nsim,
 
 And now we are plotting the resulting distribution:
 
-```{r Plot simulated distribution}
+### Base R {.unnumbered}
+
+```{r Plot simulated distribution (base R)}
 hist(
   x = simsupport,
   main = "Sampling Distribution of the Sample Mean (via Simulation)",
@@ -356,6 +358,35 @@ lines(density(simsupport),
 )
 ```
 
+### ggplot2 {.unnumbered}
+
+```{r Plot simulated distribution (ggplot)}
+# create a dataset
+simsupport_df <- data.frame(simsupport)
+
+ggplot(
+  simsupport_df, # use our dataset
+  aes(x = simsupport)
+) + # put simsupport on x-axis
+  labs(
+    title = "Sampling Distribution of the Sample Mean (via Simulation)",
+    x = "Support for Policy",
+    y = ""
+  ) +
+  geom_histogram(aes(y = ..density..), # add histogram
+    boundary = 14,
+    binwidth = 0.1,
+    fill = viridis(4)[1], # change color
+    color = "white"
+  ) + # make white bin borders
+  geom_density(color = viridis(4)[3], linewidth = 1) + # add density
+  theme_minimal() + # change appearance
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+```
+
 Now we can calculate empirical quantiles from the distribution:
 
 ```{r Simulated CI}
@@ -370,6 +401,9 @@ And let's see if there is a numerical difference between two approaches:
 ```{r Compare CIs}
 ci_sim - ci_an # should be close to zero!
 ```
+#  {.unnumbered}
+
+## {.tabset .unnumbered}
 
 Even better, we can even add the quantiles to the plot.
 
@@ -449,7 +483,7 @@ ggplot(
     fill = viridis(4)[1], # change color
     color = "white"
   ) + # make white bin borders
-  geom_density(color = viridis(4)[2]) + # add density
+    geom_density(color = viridis(4)[3], linewidth = 1) + # add density
   geom_vline( # add simulated CIs
     xintercept = ci_sim,
     color = viridis(4, alpha = 0.75)[4],
@@ -591,7 +625,7 @@ ggplot(
     fill = viridis(4)[1],
     color = "white"
   ) +
-  geom_density(color = viridis(4)[2]) +
+    geom_density(color = viridis(4)[3], linewidth = 1) +
   theme_minimal() +
   geom_vline(
     xintercept = ci_an,
