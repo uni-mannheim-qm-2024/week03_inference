@@ -1,5 +1,5 @@
 ---
-title: "QM 2023 Week 3: Statistical Inference"
+title: "QM 2024 Week 3: Statistical Inference"
 author: "Domantas Undzėnas<br>Lisa-Marie Müller"
 date: "September 19 | 20, 2024"
 output:
